@@ -11,6 +11,7 @@ export const actions: Actions = {
     const name = body.get('name')?.toString();
     const price = body.get('price')?.toString();
     const category = body.get('category')?.toString();
+    const image_url = body.get('image_url')?.toString();
     if (!name || !price || !category) {
       return error(400, { message: 'Name, description, price and category are required' });
     }
@@ -19,7 +20,8 @@ export const actions: Actions = {
         name,
         description,
         price,
-        category_id: +category
+        category_id: +category,
+        image_url
       };
       const res = createProduct(productPayload);
       return res;

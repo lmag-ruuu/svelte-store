@@ -11,52 +11,62 @@
 	import axios from 'axios';
 	import { getAllCategoriesQuery } from '$lib/services/categories/query';
 	import type { SelectCategory } from '$lib/db/category.entity';
+	import { goto } from '$app/navigation';
 
+	$: selectedRoute = '';
 	export let data: {
 		categories: SelectCategory[] | undefined;
 	};
-
-	$: selectedRoute = '';
-
 	let categoriesQuery = getAllCategoriesQuery(data.categories);
+	$: disabled = false;
 
+	// handlers
 	const handleSubmit = async (event: SubmitEvent | { target: HTMLFormElement }) => {
-		// @ts-ignore
-		const action_url = event?.target?.action as string;
-		console.log(action_url);
-		const formData = new FormData(event.target as HTMLFormElement);
-		if (!selectedRoute) {
-			toast.error('Please select a category');
-			return;
-		}
+		disabled = true;
+		if (event.target instanceof HTMLFormElement) {
+			const action_url = event?.target?.action as string;
+			const formData = new FormData(event.target as HTMLFormElement);
+			if (!selectedRoute) {
+				toast.error('Please select a category');
+				return;
+			}
+			formData.append('category', selectedRoute);
 
-		formData.append('category', selectedRoute);
-		try {
-			await axios.post(action_url, formData);
-			toast.success('Product created');
-		} catch (error) {
-			toast.error('Something went wrong');
-			return;
+			const res = await axios.post(action_url, formData);
+			console.log(res);
+			if (res.status !== 200) {
+				toast.error('Something went wrong');
+				return;
+			}
+			toast.success('Product created, redirecting to products page...');
+			setTimeout(() => {
+				goto('/products');
+				disabled = false;
+			}, 2500);
+		} else {
+			toast.error('Invalid form action');
 		}
 	};
 
 	const handleAddCategory = async (event: SubmitEvent | { target: HTMLFormElement }) => {
-		// @ts-ignore
-		const action_url = event?.target?.action as string;
-		const formData = new FormData(event.target as HTMLFormElement);
-		const name = formData.get('name')?.toString();
-		if (!name) {
-			toast.error('Name is required');
-			return;
-		}
-
-		try {
-			await axios.post(action_url, formData);
+		if (event.target instanceof HTMLFormElement) {
+			const action_url = event?.target?.action as string;
+			const formData = new FormData(event.target as HTMLFormElement);
+			const name = formData.get('name')?.toString();
+			if (!name) {
+				toast.error('Name is required');
+				return;
+			}
+			const res = await axios.post(action_url, formData);
+			console.log(res);
+			if (res.status !== 200) {
+				toast.error('Something went wrong');
+				return;
+			}
 			toast.success('Category created');
 			$categoriesQuery.refetch();
-		} catch (error) {
-			toast.error('Something went wrong');
-			return;
+		} else {
+			toast.error('Invalid form action');
 		}
 	};
 </script>
@@ -66,7 +76,7 @@
 	<form class="stack w-full" on:submit|preventDefault={handleSubmit} action="?/add-product">
 		<div class="stack w-full">
 			<Label for="name">Name</Label>
-			<Input type="text" id="name" name="name" required />
+			<Input type="text" id="name" name="name" required autocomplete="off" />
 		</div>
 		<div class="stack w-full">
 			<Label for="description">Description</Label>
@@ -75,6 +85,10 @@
 		<div class="stack w-full">
 			<Label for="price">Price</Label>
 			<Input type="number" id="price" name="price" required />
+		</div>
+		<div class="stack w-full">
+			<Label for="image_url">Image URL</Label>
+			<Input type="text" id="image_url" name="image_url" required autocomplete="off" />
 		</div>
 		<div class="stack w-full">
 			<Label for="category">Category</Label>
@@ -112,7 +126,7 @@
 			</div>
 		</div>
 		<div class="stack w-full">
-			<Button type="submit" class="w-full">Create</Button>
+			<Button type="submit" class="w-full" disabled={disabled}>Create</Button>
 		</div>
 	</form>
 </div>

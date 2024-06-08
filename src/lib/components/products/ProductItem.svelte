@@ -13,7 +13,9 @@
 
 <Card class="w-full rounded-xl overflow-hidden ">
 	<CardHeader class="p-0  max-h-[200px] overflow-hidden">
-		<img src={product.image_url} alt={product.name} class="w-full object-fill" />
+		{#if product.image_url}
+			<img src={product.image_url} alt={product.name} class="w-full object-fill" />
+		{/if}
 	</CardHeader>
 	<CardContent class="p-4">
 		<CardTitle>{product.name}</CardTitle>
