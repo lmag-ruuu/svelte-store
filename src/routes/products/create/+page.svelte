@@ -5,19 +5,20 @@
 	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
 	import MainSelect from '$lib/components/base/MainSelect.svelte';
 	import MainDialog from '$lib/components/base/MainDialog.svelte';
+	import { Close } from '$lib/components/ui/dialog';
 	import { Plus } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
 	import axios from 'axios';
+	import { getAllCategoriesQuery } from '$lib/services/categories/query';
+	import type { SelectCategory } from '$lib/db/category.entity';
 
-	const fruits = [
-		{ value: 'apple', label: 'Apple' },
-		{ value: 'banana', label: 'Banana' },
-		{ value: 'blueberry', label: 'Blueberry' },
-		{ value: 'grapes', label: 'Grapes' },
-		{ value: 'pineapple', label: 'Pineapple' }
-	];
+	export let data: {
+		categories: SelectCategory[] | undefined;
+	};
 
 	$: selectedRoute = '';
+
+	let categoriesQuery = getAllCategoriesQuery(data.categories);
 
 	const handleSubmit = async (event: SubmitEvent | { target: HTMLFormElement }) => {
 		// @ts-ignore
@@ -30,10 +31,29 @@
 		}
 
 		formData.append('category', selectedRoute);
+		try {
+			await axios.post(action_url, formData);
+			toast.success('Product created');
+		} catch (error) {
+			toast.error('Something went wrong');
+			return;
+		}
+	};
+
+	const handleAddCategory = async (event: SubmitEvent | { target: HTMLFormElement }) => {
+		// @ts-ignore
+		const action_url = event?.target?.action as string;
+		const formData = new FormData(event.target as HTMLFormElement);
+		const name = formData.get('name')?.toString();
+		if (!name) {
+			toast.error('Name is required');
+			return;
+		}
 
 		try {
-			const res = await axios.post(action_url, formData);
-      console.log(res);
+			await axios.post(action_url, formData);
+			toast.success('Category created');
+			$categoriesQuery.refetch();
 		} catch (error) {
 			toast.error('Something went wrong');
 			return;
@@ -42,41 +62,51 @@
 </script>
 
 <div class="min-h-screen w-full v-stack justify-center">
-	<form class="stack" on:submit|preventDefault={handleSubmit}>
-		<div class="stack">
+	<p class="text-3xl font-bold self-start">Crear producto</p>
+	<form class="stack w-full" on:submit|preventDefault={handleSubmit} action="?/add-product">
+		<div class="stack w-full">
 			<Label for="name">Name</Label>
 			<Input type="text" id="name" name="name" required />
 		</div>
-		<div class="stack">
+		<div class="stack w-full">
 			<Label for="description">Description</Label>
 			<Textarea id="description" name="description" />
 		</div>
-		<div class="stack">
+		<div class="stack w-full">
 			<Label for="price">Price</Label>
 			<Input type="number" id="price" name="price" required />
 		</div>
-		<div class="stack">
+		<div class="stack w-full">
 			<Label for="category">Category</Label>
-			<div class="h-stack">
+			<div class="h-stack w-full">
 				<MainSelect
-					onSelect={(value) => (selectedRoute = value.value)}
+					onSelect={(value) => (selectedRoute = String(value?.value) || '')}
 					name="Category"
-					items={fruits}
+					items={$categoriesQuery?.data?.map((item) => ({ value: item?.id, label: item?.name })) ||
+						[]}
 					placeholder="Select a fruit"
 					required
 				/>
 				<MainDialog title="Add a new category">
 					<Plus />
-					<div slot="dialog-body" class="stack">
-						<div class="stack w-full">
-							<Label for="category">Name</Label>
-							<Input type="text" id="category" name="category" />
-						</div>
-						<div class="stack w-full">
-							<Label for="description">Description</Label>
-							<Textarea id="description" name="description" />
-						</div>
-						<Button type="submit" class="w-full">Add</Button>
+					<div slot="dialog-body" class="stack w-full">
+						<form
+							class="stack w-full"
+							on:submit|preventDefault={handleAddCategory}
+							action="?/add-category"
+						>
+							<div class="stack w-full">
+								<Label for="name">Name</Label>
+								<Input type="text" id="name" name="name" />
+							</div>
+							<div class="stack w-full">
+								<Label for="description">Description</Label>
+								<Textarea id="description" name="description" />
+							</div>
+							<Close>
+								<Button type="submit" class="w-full">Add</Button>
+							</Close>
+						</form>
 					</div>
 				</MainDialog>
 			</div>

@@ -5,9 +5,10 @@ import { category } from './category.entity';
 export const product = pgTable('Product', {
   id: serial('id').primaryKey(),
   name: varchar('name').notNull(),
-  description: varchar('description').notNull(),
+  description: varchar('description'),
   price: numeric('price').notNull(),
-  category_id: serial('category_id').notNull()
+  category_id: serial('category_id').notNull(),
+  image_url: varchar('image_url'),
 });
 
 export const ProductRelations = relations(product, ({ one }) => {
