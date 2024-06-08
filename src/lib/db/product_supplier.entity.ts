@@ -1,9 +1,9 @@
-import { pgTable, uuid } from 'drizzle-orm/pg-core';
+import { pgTable, serial } from 'drizzle-orm/pg-core';
 
 export const product_supplier = pgTable('ProductSupplier', {
-  id: uuid('id').notNull().primaryKey(),
-  product_id: uuid('product_id').notNull(),
-  supplier_id: uuid('supplier_id').notNull(),
+ id: serial('id').primaryKey(),
+  product_id: serial('product_id').notNull(),
+  supplier_id: serial('supplier_id').notNull(),
 });
 
 export type InsertProductSupplier = typeof product_supplier.$inferInsert;

@@ -1,15 +1,13 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link href="%sveltekit.assets%/rpg-ui/dist/rpgui.css" rel="stylesheet" type="text/css" />
-		<script src="%sveltekit.assets%/rpg-ui/dist/rpgui.js"></script>
 		%sveltekit.head%
 	</head>
-	<body data-sveltekit-preload-data="hover" class="rpgui-content framed m-0 flex justify-center">
-		<main class="rpgui-container framed min-w-[375px] min-h-[100dvh] m-0 mx-auto">
+	<body data-sveltekit-preload-data="hover" class="m-0 flex justify-center">
+		<main class="min-w-[375px] min-h-[100dvh] m-0 mx-auto">
 			<div style="display: contents">%sveltekit.body%</div>
 		</main>
 	</body>
