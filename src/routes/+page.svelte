@@ -6,7 +6,9 @@
 	<div class="h-stack w-full justify-between">
 		<h1 class="text-3xl font-bold">Welcome</h1>
 		<div class="flex items-center gap-2">
-			<Button class="w-full">Login</Button>
+			<a href="/auth/sign-in">
+				<Button class="w-full">Login</Button>
+			</a>
 			<a href="/auth/sign-up">
 				<Button class="w-full" variant="ghost">Sign up</Button>
 			</a>
