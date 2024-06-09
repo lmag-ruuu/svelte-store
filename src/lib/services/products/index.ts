@@ -4,7 +4,7 @@ import { db } from "$lib/db";
 
 
 export async function getProducts() {
-  return await db.query.product.findMany();
+  return (await db.query.product.findMany()).reverse();
 };
 
 export const createProduct = (data: InsertProduct) => {

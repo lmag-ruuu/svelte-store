@@ -71,7 +71,7 @@
 	};
 </script>
 
-<div class="min-h-screen w-full v-stack justify-center">
+<div class="min-h-screen w-full v-stack justify-center p-6 max-w-[450px] mx-auto">
 	<p class="text-3xl font-bold self-start">Crear producto</p>
 	<form class="stack w-full" on:submit|preventDefault={handleSubmit} action="?/add-product">
 		<div class="stack w-full">
