@@ -15,6 +15,20 @@
       "when": 1717831164652,
       "tag": "0001_solid_songbird",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1717907732129,
+      "tag": "0002_round_slyde",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1717911586402,
+      "tag": "0003_whole_shadow_king",
+      "breakpoints": true
     }
   ]
 }

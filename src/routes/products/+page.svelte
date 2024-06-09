@@ -39,16 +39,7 @@
 		class="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 w-full"
 	>
 		{#each $productQuery.data as product}
-			<ProductItem
-				product={{
-					id: product.id,
-					name: product.name,
-					description: product.description,
-					price: product.price,
-					category_id: product.category_id,
-					image_url: product.image_url
-				}}
-			/>
+			<ProductItem {product} />
 		{/each}
 	</div>
 </div>
