@@ -11,7 +11,7 @@
 	export let product: SelectProduct;
 </script>
 
-<Card class="w-full rounded-xl overflow-hidden ">
+<Card class="w-full rounded-xl overflow-hidden h-full">
 	<CardHeader class="p-0  max-h-[200px] overflow-hidden">
 		{#if product.image_url}
 			<img src={product.image_url} alt={product.name} class="w-full object-fill" />
