@@ -9,7 +9,7 @@
 	import { getAllProducts } from '$lib/services/products/query';
 	import { Plus } from 'lucide-svelte';
 
-	$: categoryQuery = Number($page.url.searchParams.get('category'));
+	$: categoryQuery = $page.url.searchParams.get('category');
 
 	export let data: {
 		products: SelectProduct[] | undefined;
@@ -17,7 +17,7 @@
 	};
 	let categoriesQuery = getAllCategoriesQuery();
 	$: productQuery = getAllProducts(data.products, {
-		category: categoryQuery,
+		category: categoryQuery !== null ? +categoryQuery : undefined,
 		keyword: $page.url.searchParams.get('keyword') as string
 	});
 </script>

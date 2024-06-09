@@ -10,15 +10,17 @@
 		SelectItem
 	} from '$lib/components/ui/select';
 
+	interface IItem {
+		value: string | number | undefined;
+		label: string;
+		disabled?: boolean;
+	}
+
 	export let name: string;
-  export let placeholder: string | undefined = undefined;
-	export let items: Array<{ value: string | number; label: string; disabled?: boolean } | undefined>;
-  export let required: boolean = false;
-  export let onSelect: (value: {
-    value?:    string | number;
-    label?:    string;
-    disabled?: boolean;
-  } | undefined) => void;
+	export let placeholder: string | undefined = undefined;
+	export let items: Array<IItem | undefined>;
+	export let required: boolean = false;
+	export let onSelect: (value: Partial<IItem> | undefined) => void;
 </script>
 
 <Select portal={null} {required} onSelectedChange={onSelect}>
