@@ -3,7 +3,7 @@
 </script>
 
 <div class="min-h-screen stack p-6 w-full">
-	<div class="h-stack w-full justify-between">
+	<div class="h-stack w-full justify-between flex-wrap">
 		<h1 class="text-3xl font-bold">Welcome</h1>
 		<div class="flex items-center gap-2">
 			<a href="/auth/sign-in">
