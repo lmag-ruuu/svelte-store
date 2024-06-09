@@ -4,14 +4,12 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
 	import MainSelect from '$lib/components/base/MainSelect.svelte';
-	import MainDialog from '$lib/components/base/MainDialog.svelte';
-	import { Close } from '$lib/components/ui/dialog';
-	import { Plus } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
 	import axios from 'axios';
 	import { getAllCategoriesQuery } from '$lib/services/categories/query';
 	import type { SelectCategory } from '$lib/db/category.entity';
 	import { goto } from '$app/navigation';
+	import CreateCategoryDialog from '$lib/components/categories/CreateCategoryDialog.svelte';
 
 	$: selectedRoute = '';
 	export let data: {
@@ -101,28 +99,7 @@
 					placeholder="Select a fruit"
 					required
 				/>
-				<MainDialog title="Add a new category">
-					<Plus />
-					<div slot="dialog-body" class="stack w-full">
-						<form
-							class="stack w-full"
-							on:submit|preventDefault={handleAddCategory}
-							action="?/add-category"
-						>
-							<div class="stack w-full">
-								<Label for="name">Name</Label>
-								<Input type="text" id="name" name="name" />
-							</div>
-							<div class="stack w-full">
-								<Label for="description">Description</Label>
-								<Textarea id="description" name="description" />
-							</div>
-							<Close>
-								<Button type="submit" class="w-full">Add</Button>
-							</Close>
-						</form>
-					</div>
-				</MainDialog>
+				<CreateCategoryDialog handleAddCategory={handleAddCategory} />
 			</div>
 		</div>
 		<div class="stack w-full">

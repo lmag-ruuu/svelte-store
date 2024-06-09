@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import ProductItem from '$lib/components/products/ProductItem.svelte';
 	import ProductSearch from '$lib/components/products/ProductSearch.svelte';
-	import Button from '$lib/components/ui/button/button.svelte';
+	import { Button } from '$lib/components/ui/button';
 	import type { SelectCategory } from '$lib/db/category.entity';
 	import type { SelectProduct } from '$lib/db/product.entity';
 	import { getAllCategoriesQuery } from '$lib/services/categories/query';

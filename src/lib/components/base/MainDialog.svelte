@@ -7,7 +7,7 @@
 </script>
 
 <Dialog.Root>
-	<Dialog.Trigger class={buttonVariants({ variant: 'outline' })}>
+	<Dialog.Trigger>
 		<slot />
 	</Dialog.Trigger>
 	<Dialog.Content class="sm:max-w-[425px]">
