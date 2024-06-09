@@ -31,6 +31,9 @@
 	</div>
 	<div class="h-stack w-full">
 		<ProductSearch categories={$categoriesQuery?.data} />
+		<a href="/categories">
+			<Button type="button" variant="ghost" class="ml-auto">See all categories</Button>
+		</a>
 	</div>
 	<div
 		class="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 w-full"

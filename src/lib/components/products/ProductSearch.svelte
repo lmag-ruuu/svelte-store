@@ -35,6 +35,7 @@
 <div class="h-stack w-full">
 	<Input type="text" placeholder="Search" on:input={handleSearch} />
 	<MainSelect
+		placeholder="By Category"
 		name="Category"
 		items={categories
 			? [...clearValue, ...categories?.map((item) => ({ value: item?.id, label: item?.name }))]
