@@ -1,6 +1,7 @@
 import { pgTable,serial, varchar } from 'drizzle-orm/pg-core';
 import { product } from './product.entity';
 import { relations } from 'drizzle-orm';
+import { orders } from './order.entity';
 
 export const supplier = pgTable('Supplier', {
   id: serial('id').primaryKey(),
@@ -13,7 +14,8 @@ export const supplier = pgTable('Supplier', {
 
 export const SupplierRelations = relations(supplier, ({  many }) => {
   return {
-    products: many(product)
+    products: many(product),
+    orders: many(orders)
   }
 });
 
