@@ -16,11 +16,6 @@ export interface IBaseLocals {
 const SECRET = process.env.SECRET as string;
 const REDIS_URL = process.env.REDIS_URL as string | undefined;
 
-console.log({
-  REDIS_URL,
-  SECRET
-})
-
 // Now we will create new Instance for RedisSessionStore
 const options = {
   redisClient: new Redis(REDIS_URL || 'redis://localhost:6379'),

@@ -14,12 +14,12 @@
 
 			try {
 				const res = await axios.post(action_url, formData);
-				console.log(res);
+
 				toast.success('Signed in');
 				goto('/');
 			} catch (_e) {
 				const error = _e as AxiosError<{ error: { message: string } }>;
-				console.log(error);
+
 				toast.error(error.response?.data?.error.message || 'Something went wrong');
 			}
 		}

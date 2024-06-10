@@ -21,9 +21,11 @@
 	export let items: Array<IItem | undefined>;
 	export let required: boolean = false;
 	export let onSelect: (value: Partial<IItem> | undefined) => void;
+	export let defaultValue: IItem | undefined = undefined;
+	let selected = defaultValue || undefined;
 </script>
 
-<Select portal={null} {required} onSelectedChange={onSelect}>
+<Select portal={null} {required} onSelectedChange={onSelect} bind:selected>
 	<SelectTrigger>
 		<SelectValue {placeholder} />
 	</SelectTrigger>

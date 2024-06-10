@@ -5,12 +5,14 @@
 	import Input from '../ui/input/input.svelte';
 	import MainSelect from '../base/MainSelect.svelte';
 	import type { SelectCategory } from '$lib/db/category.entity';
+	import { Button } from '../ui/button';
+	import { type SelectSupplier } from '$lib/db/supplier.entity';
 
 	export let categories: SelectCategory[] | undefined;
+	export let suppliers: SelectSupplier[] | undefined;
 
 	const goQueryString = (key: string, value: string | number | undefined) => {
 		let query = new URLSearchParams($page.url.searchParams.toString());
-		console.log(value);
 		if (value === null) {
 			query.delete(key);
 		} else if (value !== undefined) {
@@ -32,16 +34,37 @@
 	let clearValue = [{ value: undefined, label: 'All', disabled: true }];
 </script>
 
-<div class="h-stack w-full">
-	<Input type="text" placeholder="Search" on:input={handleSearch} />
-	<MainSelect
-		placeholder="By Category"
-		name="Category"
-		items={categories
-			? [...clearValue, ...categories?.map((item) => ({ value: item?.id, label: item?.name }))]
-			: []}
-		onSelect={(value) => {
-			handleChange(value?.value);
-		}}
-	/>
+<div class="stack w-full">
+	<div class="v-stack w-full">
+		<Input type="text" placeholder="Search" on:input={handleSearch} />
+	</div>
+	<div class="h-stack w-full">
+		<!-- <MainSelect
+			placeholder="Supplier"
+			name="Supplier"
+			defaultValue={suppliers?.[0]
+				? {
+						value: suppliers[0]?.id,
+						label: suppliers[0]?.name
+					}
+				: undefined}
+			items={suppliers ? suppliers?.map((item) => ({ value: item?.id, label: item?.name })) : []}
+			onSelect={(value) => {
+				handleChange(value?.value);
+			}}
+		/> -->
+		<MainSelect
+			placeholder="Category"
+			name="Category"
+			items={categories
+				? [...clearValue, ...categories?.map((item) => ({ value: item?.id, label: item?.name }))]
+				: []}
+			onSelect={(value) => {
+				handleChange(value?.value);
+			}}
+		/>
+		<a href="/categories" class="w-full">
+			<Button type="button" variant="ghost" class="ml-auto">See all categories</Button>
+		</a>
+	</div>
 </div>

@@ -9,8 +9,11 @@
 	import { getAllCategoriesQuery } from '$lib/services/categories/query';
 	import { getAllProducts } from '$lib/services/products/query';
 	import type { IBaseLocals } from '$lib/services/session/sessionManager';
-	import { Plus, ShoppingCart } from 'lucide-svelte';
+	import { getAllSuppliersQuery } from '$lib/services/suppliers/query';
+	import { Plus } from 'lucide-svelte';
 	import { writable, readonly } from 'svelte/store';
+	import { browser } from '$app/environment';
+	import { toast } from 'svelte-sonner';
 
 	$: categoryQuery = $page.url.searchParams.get('category');
 
@@ -21,15 +24,17 @@
 	};
 
 	let categoriesQuery = getAllCategoriesQuery();
+	let suppliersQuery = getAllSuppliersQuery();
 	$: productQuery = getAllProducts(data.products, {
 		category: categoryQuery !== null ? +categoryQuery : undefined,
 		keyword: $page.url.searchParams.get('keyword') as string
 	});
 
 	function localStorageStore(key: string, initial: SelectProduct[]) {
-		const value = localStorage.getItem(key);
+		const localStorage = browser ? window.localStorage : undefined;
+		const value = browser ? localStorage?.getItem(key) : undefined;
 		const store = writable<SelectProduct[]>(value == null ? initial : JSON.parse(value));
-		store.subscribe((v) => localStorage.setItem(key, JSON.stringify(v)));
+		store.subscribe((v) => localStorage?.setItem(key, JSON.stringify(v)));
 		return store;
 	}
 
@@ -41,10 +46,13 @@
 			cart.set([product]);
 			return;
 		}
-		cart.update((c) => [
-			...c.filter((item) => item.id !== product.id),
-			...(remove ? [] : [product])
-		]);
+		if (remove) {
+			cart.update((c) => c.filter((item) => item.id !== product.id));
+			toast.success('Product removed from cart');
+			return;
+		}
+		cart.update((c) => [...c, product]);
+		toast.success('Product added to cart');
 	};
 </script>
 
@@ -60,14 +68,9 @@
 		{/if}
 	</div>
 	<div class="h-stack w-full">
-		<ProductSearch categories={$categoriesQuery?.data} />
-		<a href="/categories">
-			<Button type="button" variant="ghost" class="ml-auto">See all categories</Button>
-		</a>
+		<ProductSearch categories={$categoriesQuery?.data} suppliers={$suppliersQuery?.data} />
 	</div>
-	<div
-		class="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 w-full"
-	>
+	<div class="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full">
 		{#each $productQuery.data as product}
 			<ProductItem
 				{product}
