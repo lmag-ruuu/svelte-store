@@ -4,6 +4,7 @@
 	import MainDialog from '../base/MainDialog.svelte';
 	import { Button } from '../ui/button';
 	import { Minus, Plus, ShoppingCart, Trash } from 'lucide-svelte';
+	import { goto } from '$app/navigation';
 
 	export let cartItems: Readable<SelectProduct[]>;
 	export let onRemove: (product: SelectProduct) => void;
@@ -26,6 +27,10 @@
 	);
 
 	$: displayCartItems = readonly(displayItemsReadable);
+
+	function gotoCheckout() {
+		goto('/orders/checkout');
+	}
 </script>
 
 <MainDialog title="New Order">
@@ -51,7 +56,12 @@
 						<p>{product.name}</p>
 					</div>
 					<div class="h-stack">
-						<Button type="button" variant="ghost" on:click={() => onSubtractProduct(product)} size="icon">
+						<Button
+							type="button"
+							variant="ghost"
+							on:click={() => onSubtractProduct(product)}
+							size="icon"
+						>
 							<Minus />
 						</Button>
 						<p>{product.quantity}</p>
@@ -75,6 +85,13 @@
 				</div>
 			{/each}
 		{/if}
-		<Button type="button" class="w-full mt-3">Create order</Button>
+		<Button
+			on:click={gotoCheckout}
+			disabled={$displayCartItems.length === 0}
+			type="button"
+			class="w-full mt-3"
+		>
+			Create order
+		</Button>
 	</div>
 </MainDialog>
