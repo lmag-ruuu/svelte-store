@@ -11,7 +11,7 @@
 		<Carousel.Content>
 			{#each products as product}
 				<Carousel.Item class="md:basis-1/2 lg:basis-1/3">
-					<ProductItem {product} />
+					<ProductItem {product} onAddToCart={undefined} />
 				</Carousel.Item>
 			{/each}
 		</Carousel.Content>
