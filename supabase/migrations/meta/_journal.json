@@ -50,6 +50,13 @@
       "when": 1718035018874,
       "tag": "0006_amusing_the_hand",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1718039962054,
+      "tag": "0007_aspiring_silver_fox",
+      "breakpoints": true
     }
   ]
 }
