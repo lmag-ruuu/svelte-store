@@ -31,8 +31,8 @@ export type InsertOrder = typeof orders.$inferInsert;
 export type SelectOrder = typeof orders.$inferSelect;
 export type SelectOrderWithProducts = SelectOrder & {
   products_in_order: Array<{
-    products: SelectProduct;
+    product: SelectProduct;
     quantity: number;
   }>
 };
-export type SelectOrderByBundleId = Array<{ name: string, orders: Array<SelectOrder> }>
+export type SelectOrderByBundleId = Array<{ name: string, orders: Array<SelectOrderWithProducts> }>
