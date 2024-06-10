@@ -45,7 +45,7 @@ export const actions: Actions = {
     }
     // manage sesion
     const { error: sessionError, message } = await sessionManager.createSession(cookies, {
-      email, user_type: user.user_type
+      email, user_type: user.user_type, id: user.id
     }, String(user.id));
     if (sessionError) {
       return error(400, {

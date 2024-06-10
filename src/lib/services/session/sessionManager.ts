@@ -6,6 +6,7 @@ import Redis from 'ioredis';
 export interface IUserSession {
   email: string;
   user_type: string;
+  id: number;
 }
 
 export interface IBaseLocals {

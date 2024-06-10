@@ -4,7 +4,7 @@ import { redirect } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
   const userSession = await sessionManager.getSession(await event.cookies);
-  
+
   event.locals = {
     isUserLoggedIn: false,
     user: null
@@ -18,7 +18,8 @@ export const handle: Handle = async ({ event, resolve }) => {
       isUserLoggedIn: true,
       user: {
         email: userSession?.data?.email as string,
-        user_type: userSession?.data?.user_type as string
+        user_type: userSession?.data?.user_type as string,
+        id: userSession?.data?.id as number
       }
     };
   }

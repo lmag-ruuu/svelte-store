@@ -2,7 +2,6 @@ import { relations } from 'drizzle-orm';
 import { pgTable, serial, date, numeric, text } from 'drizzle-orm/pg-core';
 import { customers } from './customer.entity';
 import { supplier } from './supplier.entity';
-import { product } from './product.entity';
 import { OrderProduct } from './order_product.entity';
 
 export const orders = pgTable('Orders', {
