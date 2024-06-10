@@ -5,7 +5,7 @@
 	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
 	import MainSelect from '$lib/components/base/MainSelect.svelte';
 	import { toast } from 'svelte-sonner';
-	import axios from 'axios';
+	import axios, { AxiosError } from 'axios';
 	import { getAllCategoriesQuery } from '$lib/services/categories/query';
 	import type { SelectCategory } from '$lib/db/category.entity';
 	import { goto } from '$app/navigation';
@@ -30,17 +30,17 @@
 			}
 			formData.append('category', selectedRoute);
 
-			const res = await axios.post(action_url, formData);
-			console.log(res);
-			if (res.status !== 200) {
-				toast.error('Something went wrong');
-				return;
+			try {
+				await axios.post(action_url, formData);
+				toast.success('Product created, redirecting to products page...');
+				setTimeout(() => {
+					goto('/products');
+					disabled = false;
+				}, 2500);
+			} catch (_e) {
+				const error = _e as AxiosError<{ error: { message: string } }>;
+				toast.error(error.response?.data?.error.message || 'Something went wrong');
 			}
-			toast.success('Product created, redirecting to products page...');
-			setTimeout(() => {
-				goto('/products');
-				disabled = false;
-			}, 2500);
 		} else {
 			toast.error('Invalid form action');
 		}
@@ -55,14 +55,15 @@
 				toast.error('Name is required');
 				return;
 			}
-			const res = await axios.post(action_url, formData);
-			console.log(res);
-			if (res.status !== 200) {
-				toast.error('Something went wrong');
-				return;
+
+			try {
+				await axios.post(action_url, formData);
+				toast.success('Category created');
+				$categoriesQuery.refetch();
+			} catch (_e) {
+				const error = _e as AxiosError<{ error: { message: string } }>;
+				toast.error(error.response?.data?.error.message || 'Something went wrong');
 			}
-			toast.success('Category created');
-			$categoriesQuery.refetch();
 		} else {
 			toast.error('Invalid form action');
 		}
@@ -99,11 +100,11 @@
 					placeholder="Select a fruit"
 					required
 				/>
-				<CreateCategoryDialog handleAddCategory={handleAddCategory} />
+				<CreateCategoryDialog {handleAddCategory} />
 			</div>
 		</div>
 		<div class="stack w-full">
-			<Button type="submit" class="w-full" disabled={disabled}>Create</Button>
+			<Button type="submit" class="w-full" {disabled}>Create</Button>
 		</div>
 	</form>
 </div>
