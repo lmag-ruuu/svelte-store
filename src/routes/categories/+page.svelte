@@ -1,13 +1,18 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import CreateCategoryDialog from '$lib/components/categories/CreateCategoryDialog.svelte';
 	import ProductCarousel from '$lib/components/products/ProductCarousel.svelte';
+	import { Button } from '$lib/components/ui/button';
 	import type { SelectCategoryWithProducts } from '$lib/db/category.entity';
 	import { getAllCategoriesQueryWProducts } from '$lib/services/categories/query';
+	import type { IBaseLocals } from '$lib/services/session/sessionManager';
 	import axios, { AxiosError } from 'axios';
+	import { ChevronLeft, Minus } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
 
 	export let data: {
 		categories: SelectCategoryWithProducts[] | undefined;
+		session: IBaseLocals;
 	};
 
 	let categoriesQuery = getAllCategoriesQueryWProducts(data.categories, { populate: true });
@@ -38,8 +43,15 @@
 
 <div class="min-h-screen stack p-6 w-full">
 	<div class="h-stack w-full justify-between">
-		<h1 class="text-3xl font-bold">Categories</h1>
-		<CreateCategoryDialog {handleAddCategory} />
+		<div class="h-stack">
+			<Button class="" variant="ghost" size="icon" on:click={() => goto('/products')}>
+				<ChevronLeft />
+			</Button>
+			<h1 class="text-3xl font-bold">Categories</h1>
+		</div>
+		{#if data.session.user?.user_type === 'supplier'}
+			<CreateCategoryDialog {handleAddCategory} />
+		{/if}
 	</div>
 	<div class="stack w-full">
 		{#if $categoriesQuery.data}

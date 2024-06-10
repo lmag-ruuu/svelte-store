@@ -100,4 +100,7 @@
 		</RadioGroup.Root>
 		<Button type="submit" class="w-full">Sign up</Button>
 	</form>
+	<a href="/auth/sign-in" class="text-sm text-gray-500 hover:text-gray-700 w-full">
+		<Button type="button" class="w-full" variant="ghost">Already have an account? Sign in</Button>
+	</a>
 </div>

@@ -10,10 +10,11 @@
 	import { getAllProducts } from '$lib/services/products/query';
 	import type { IBaseLocals } from '$lib/services/session/sessionManager';
 	import { getAllSuppliersQuery } from '$lib/services/suppliers/query';
-	import { Plus } from 'lucide-svelte';
+	import { Home, Plus } from 'lucide-svelte';
 	import { writable, readonly } from 'svelte/store';
 	import { browser } from '$app/environment';
 	import { toast } from 'svelte-sonner';
+	import { goto } from '$app/navigation';
 
 	$: categoryQuery = $page.url.searchParams.get('category');
 
@@ -71,18 +72,23 @@
 <div class="min-h-screen stack p-6 w-full">
 	<div class="h-stack w-full justify-between">
 		<h1 class="text-3xl font-bold">Products</h1>
-		{#if data.session.user?.user_type === 'customer'}
-			<ProductCart
-				{cartItems}
-				onRemove={(product) => mutateCard(product, 'remove')}
-				onAddProduct={(product) => mutateCard(product)}
-				onSubtractProduct={(product) => mutateCard(product, 'subtract')}
-			/>
-		{:else}
-			<a href="/products/create">
-				<Button type="button" size="icon"><Plus /></Button>
-			</a>
-		{/if}
+		<div class="h-stack">
+			<Button class="" variant="ghost" size="icon" on:click={() => goto('/')}>
+				<Home />
+			</Button>
+			{#if data.session.user?.user_type === 'customer'}
+				<ProductCart
+					{cartItems}
+					onRemove={(product) => mutateCard(product, 'remove')}
+					onAddProduct={(product) => mutateCard(product)}
+					onSubtractProduct={(product) => mutateCard(product, 'subtract')}
+				/>
+			{:else}
+				<a href="/products/create">
+					<Button type="button" size="icon"><Plus /></Button>
+				</a>
+			{/if}
+		</div>
 	</div>
 	<div class="h-stack w-full">
 		<ProductSearch categories={$categoriesQuery?.data} />

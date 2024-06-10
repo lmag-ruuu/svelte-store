@@ -43,6 +43,13 @@
       "when": 1718000385270,
       "tag": "0005_skinny_stryfe",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1718035018874,
+      "tag": "0006_amusing_the_hand",
+      "breakpoints": true
     }
   ]
 }

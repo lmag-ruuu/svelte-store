@@ -45,11 +45,13 @@ export const placeOrder = async (data: IOrderPayload) => {
     const promises = newOrders.map(async (o) => {
       const order = await trx.insert(orders).values(o).returning();
       await trx.insert(OrderProduct).values(
-        data.products.map((p) => ({
-          order_id: order[0]?.id,
-          product_id: +p.id,
-          quantity: p.quantity
-        }))
+        data.products
+          .filter((i) => +i.supplier_id === +order[0].supplier_id)
+          .map((p) => ({
+            order_id: order[0]?.id,
+            product_id: +p.id,
+            quantity: p.quantity
+          }))
       );
     });
 

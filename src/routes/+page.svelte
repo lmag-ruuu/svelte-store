@@ -9,13 +9,12 @@
 		session: IBaseLocals;
 	};
 
-	let logout = async () => 	{
+	let logout = async () => {
 		try {
 			await axios.post('/api/auth/logout');
 			goto('/auth/sign-in');
 		} catch (e) {
 			toast.error('Error logging out');
-
 		}
 	};
 </script>
@@ -25,6 +24,9 @@
 		<h1 class="text-3xl font-bold">Welcome</h1>
 		<div class="flex items-center gap-2">
 			{#if data.session.isUserLoggedIn}
+				<a href="/products">
+					<Button class="w-full">Products</Button>
+				</a>
 				<Button on:click={logout} class="w-full">Logout</Button>
 			{:else}
 				<a href="/auth/sign-in">

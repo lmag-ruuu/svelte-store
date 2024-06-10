@@ -55,6 +55,7 @@
 			try {
 				await axios.post(action_url, formData);
 				toast.success('Order placed');
+        window.localStorage.setItem('cart', JSON.stringify([]));
 				goto('/orders');
 			} catch (e) {
 				const error = e as AxiosError<{ error: { message: string } }>;

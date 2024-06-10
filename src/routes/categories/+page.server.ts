@@ -1,11 +1,13 @@
 import type { InsertCategory } from "$lib/db/category.entity.js";
 import { createCategory, getCategories } from "$lib/services/categories";
+import type { IBaseLocals } from "$lib/services/session/sessionManager.js";
 import { error } from "@sveltejs/kit";
 
-export const load = async () => {
+export const load = async ({ locals }: { locals: IBaseLocals }) => {
   const res = await getCategories({ populate: true });
   return {
-    categories: res
+    categories: res,
+    session: locals
   };
 }
 
