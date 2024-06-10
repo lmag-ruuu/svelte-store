@@ -3,6 +3,7 @@
 	import OrderSupplier from '$lib/components/orders/OrderSupplier.svelte';
 	import type {
 		SelectOrderByBundleId,
+		SelectOrderByCustomerId,
 		SelectOrderWithProducts,
 		orders
 	} from '$lib/db/order.entity';
@@ -10,7 +11,7 @@
 
 	export let data: {
 		session: IBaseLocals;
-		orders: Partial<SelectOrderWithProducts[] & SelectOrderByBundleId>;
+		orders: Partial<SelectOrderWithProducts[] & SelectOrderByCustomerId>;
 	};
 </script>
 

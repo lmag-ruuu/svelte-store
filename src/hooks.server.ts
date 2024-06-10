@@ -1,6 +1,5 @@
 import { sessionManager } from '$lib/services/session/sessionManager';
 import type { Handle } from '@sveltejs/kit';
-import { redirect } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
   const userSession = await sessionManager.getSession(await event.cookies);

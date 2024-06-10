@@ -1,5 +1,4 @@
-import { supplier } from './../../db/supplier.entity';
-import { orders, type InsertOrder, type SelectOrder, type SelectOrderByBundleId, type SelectOrderByCustomerId } from "$lib/db/order.entity";
+import { orders, type InsertOrder, type SelectOrderByBundleId, type SelectOrderByCustomerId } from "$lib/db/order.entity";
 import { db } from "$lib/db";
 import { product } from "$lib/db/product.entity";
 import { eq, inArray } from "drizzle-orm";
