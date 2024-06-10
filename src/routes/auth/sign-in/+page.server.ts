@@ -1,10 +1,11 @@
 import { getCustomerByEmail } from "$lib/services/customers";
+import { sessionManager } from "$lib/services/session/sessionManager";
 import { getSupplierByEmail } from "$lib/services/suppliers";
-import { error, type Actions } from "@sveltejs/kit";
+import { error, json, type Actions } from "@sveltejs/kit";
 import { compare } from 'bcrypt'
 
 export const actions: Actions = {
-  default: async ({ request }) => {
+  default: async ({ request, cookies }) => {
     const formData = await request.formData();
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
@@ -31,25 +32,26 @@ export const actions: Actions = {
       return error(401, "Invalid email or password");
     }
 
-    if (customer) {
-      const isValid = await compare(password, customer.password);
-      if (!isValid) {
-        return error(401, "Invalid email or password");
-      }
-      return {
-        user: customer
-      }
-    } else if (supplier) {
-      const isValid = await compare(password, supplier.password);
-      if (!isValid) {
-        return error(401, "Invalid email or password");
-      }
-      return {
-        user: supplier
-      }
+    const user = customer || supplier;
+
+    if (!user) {
+      return error(401, "Invalid email or password");
     }
 
-    return error(401, "Invalid email or password");
+    const isValid = await compare(password, user.password);
 
+    if (!isValid) {
+      return error(401, "Invalid email or password");
+    }
+    // manage sesion
+    const { error: sessionError, message } = await sessionManager.createSession(cookies, {
+      email, user_type: user.user_type
+    }, String(user.id));
+    if (sessionError) {
+      return error(400, {
+        message
+      });
+    }
+    return { success: true, message };
   }
 }

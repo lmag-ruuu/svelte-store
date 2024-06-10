@@ -1,6 +1,9 @@
-export const load = () => {
+import type { IBaseLocals } from "$lib/services/session/sessionManager";
+
+export const load = ({ locals }: { locals: IBaseLocals }) => {
+  const user = locals.user;
   return {
-    hello: "hola"
+    session: locals
   }
 }
 

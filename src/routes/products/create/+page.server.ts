@@ -1,8 +1,9 @@
-import { type Actions, error } from "@sveltejs/kit";
+import { type Actions, error, redirect } from "@sveltejs/kit";
 import { type InsertCategory } from "$lib/db/category.entity";
 import { createCategory, getCategories } from "$lib/services/categories";
 import type { InsertProduct } from "$lib/db/product.entity";
 import { createProduct } from "$lib/services/products";
+import type { IBaseLocals, IUserSession } from "$lib/services/session/sessionManager";
 
 export const actions: Actions = {
   "add-product": async ({ request }) => {
@@ -51,8 +52,14 @@ export const actions: Actions = {
   }
 }
 
-export const load = async () => {
+
+export const load = async ({ locals }: { locals: IBaseLocals }) => {
   const res = await getCategories();
+
+  if(!locals.isUserLoggedIn || locals?.user?.user_type !== 'supplier') {
+    redirect(302, '/')
+  }
+
   return {
     categories: res
   };
