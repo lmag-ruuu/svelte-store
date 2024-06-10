@@ -35,4 +35,9 @@ export type SelectOrderWithProducts = SelectOrder & {
     quantity: number;
   }>
 };
+
+export type SelectOrderWithProductsAndCustomer = SelectOrderWithProducts
+  & { customer: { email: string, id: number, name: string } };
+
 export type SelectOrderByBundleId = Array<{ name: string, orders: Array<SelectOrderWithProducts> }>
+export type SelectOrderByCustomerId = Array<{ name: string, orders: Array<SelectOrderWithProductsAndCustomer> }>

@@ -1,5 +1,5 @@
 import { supplier } from './../../db/supplier.entity';
-import { orders, type InsertOrder, type SelectOrder, type SelectOrderByBundleId } from "$lib/db/order.entity";
+import { orders, type InsertOrder, type SelectOrder, type SelectOrderByBundleId, type SelectOrderByCustomerId } from "$lib/db/order.entity";
 import { db } from "$lib/db";
 import { product } from "$lib/db/product.entity";
 import { eq, inArray } from "drizzle-orm";
@@ -102,6 +102,13 @@ export const getOrdersBySupplier = async (supplier_id: number) => {
   const ordersBySupplier = await db.query.orders.findMany({
     where: eq(orders.supplier_id, supplier_id),
     with: {
+      customer: {
+        columns: {
+          email: true,
+          name: true,
+          id: true
+        }
+      },
       products_in_order: {
         columns: {
           quantity: true
@@ -113,5 +120,16 @@ export const getOrdersBySupplier = async (supplier_id: number) => {
     }
   });
 
-  return ordersBySupplier;
+  const ordersByOrderBundleId = ordersBySupplier
+    .reduce((acc, current) => {
+      const existing = acc.find((o) => o.name === current.customer.email);
+      if (existing) {
+        existing.orders.push(current);
+      } else {
+        acc.push({ name: current.customer.email, orders: [current] });
+      }
+      return acc;
+    }, [] as unknown as SelectOrderByCustomerId);
+
+  return ordersByOrderBundleId;
 };
