@@ -9,7 +9,6 @@
 	import { type SelectSupplier } from '$lib/db/supplier.entity';
 
 	export let categories: SelectCategory[] | undefined;
-	export let suppliers: SelectSupplier[] | undefined;
 
 	const goQueryString = (key: string, value: string | number | undefined) => {
 		let query = new URLSearchParams($page.url.searchParams.toString());

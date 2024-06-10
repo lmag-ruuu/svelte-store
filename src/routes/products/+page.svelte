@@ -41,14 +41,26 @@
 	const cart = localStorageStore('cart', []);
 	const cartItems = readonly(cart);
 
-	const mutateCard = (product: SelectProduct, remove = false) => {
+	const mutateCard = (product: SelectProduct, operation = 'add') => {
 		if (!data) {
 			cart.set([product]);
 			return;
 		}
-		if (remove) {
+		if (operation === 'remove') {
 			cart.update((c) => c.filter((item) => item.id !== product.id));
 			toast.success('Product removed from cart');
+			return;
+		}
+		if (operation === 'subtract') {
+			cart.update((c) =>
+				c?.filter(
+					(
+						(found) => (a) =>
+							a.id !== product.id || found || !(found = true)
+					)(false)
+				)
+			);
+			toast.success('Product subtracted from cart');
 			return;
 		}
 		cart.update((c) => [...c, product]);
@@ -60,7 +72,12 @@
 	<div class="h-stack w-full justify-between">
 		<h1 class="text-3xl font-bold">Products</h1>
 		{#if data.session.user?.user_type === 'customer'}
-			<ProductCart {cartItems} onRemove={(product) => mutateCard(product, true)} />
+			<ProductCart
+				{cartItems}
+				onRemove={(product) => mutateCard(product, 'remove')}
+				onAddProduct={(product) => mutateCard(product)}
+				onSubtractProduct={(product) => mutateCard(product, 'subtract')}
+			/>
 		{:else}
 			<a href="/products/create">
 				<Button type="button" size="icon"><Plus /></Button>
@@ -68,7 +85,7 @@
 		{/if}
 	</div>
 	<div class="h-stack w-full">
-		<ProductSearch categories={$categoriesQuery?.data} suppliers={$suppliersQuery?.data} />
+		<ProductSearch categories={$categoriesQuery?.data} />
 	</div>
 	<div class="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full">
 		{#each $productQuery.data as product}
