@@ -1,8 +1,13 @@
 import { placeOrder, type IOrderPayload } from "$lib/services/orders/index.js";
 import type { IBaseLocals } from "$lib/services/session/sessionManager.js";
-import { error } from "@sveltejs/kit";
+import { error, redirect } from "@sveltejs/kit";
 
 export const load = async ({ locals }: { locals: IBaseLocals }) => {
+
+  if(!locals.isUserLoggedIn || locals?.user?.user_type !== 'customer') {
+    redirect(302, '/')
+  }
+
   return {
     session: locals
   };

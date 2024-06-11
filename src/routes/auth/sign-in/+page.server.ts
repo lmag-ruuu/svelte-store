@@ -1,7 +1,7 @@
 import { getCustomerByEmail } from "$lib/services/customers";
-import { sessionManager } from "$lib/services/session/sessionManager";
+import { sessionManager, type IBaseLocals } from "$lib/services/session/sessionManager";
 import { getSupplierByEmail } from "$lib/services/suppliers";
-import { error, json, type Actions } from "@sveltejs/kit";
+import { error, json, redirect, type Actions } from "@sveltejs/kit";
 import { compare } from 'bcrypt'
 
 export const actions: Actions = {
@@ -53,5 +53,16 @@ export const actions: Actions = {
       });
     }
     return { success: true, message };
+  }
+}
+
+export const load = ({ locals }: { locals: IBaseLocals }) => {
+
+  if (locals.isUserLoggedIn) {
+    redirect(302, '/')
+  }
+
+  return {
+    session: locals
   }
 }

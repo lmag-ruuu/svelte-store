@@ -10,6 +10,7 @@
 	import type { SelectCategory } from '$lib/db/category.entity';
 	import { goto } from '$app/navigation';
 	import CreateCategoryDialog from '$lib/components/categories/CreateCategoryDialog.svelte';
+	import { Home } from 'lucide-svelte';
 
 	$: selectedRoute = '';
 	export let data: {
@@ -71,7 +72,12 @@
 </script>
 
 <div class="min-h-screen w-full v-stack justify-center p-6 max-w-[450px] mx-auto">
-	<p class="text-3xl font-bold self-start">Crear producto</p>
+	<div class="h-stack w-full justify-between">
+		<p class="text-3xl font-bold self-start">Add new product</p>
+		<Button class="" variant="ghost" size="icon" on:click={() => goto('/')}>
+			<Home />
+		</Button>
+	</div>
 	<form class="stack w-full" on:submit|preventDefault={handleSubmit} action="?/add-product">
 		<div class="stack w-full">
 			<Label for="name">Name</Label>

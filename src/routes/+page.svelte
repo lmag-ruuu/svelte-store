@@ -36,12 +36,24 @@
 		</div>
 	</div>
 	<!-- TODO create layout dashboard -->
-	<div class="h-stack w-full">
-		<div class="grid">
+
+	<div class="grid gap-2 grid-cols-1 w-full">
+		<picture class="justify-self-center">
+			 <div class="w-[80px] h-[80px] rounded-full bg-gray-200 object-fill stack justify-center !items-center text-gray-950">
+				<p>Avatar</p>
+			 </div>
+		</picture>
+		<div class="text-center w-full">
+			<p>{data?.session?.user?.email}</p>
+			<p>{data?.session?.user?.user_type}</p>
+		</div>
+		<div class="grid gap-2">
 			<a href="/products">
 				<Button class="w-full">Products</Button>
 			</a>
-
+			<a href="/orders">
+				<Button class="w-full">Order History</Button>
+			</a>
 		</div>
 	</div>
 </div>

@@ -7,6 +7,7 @@
 	import type { SelectProduct } from '$lib/db/product.entity';
 	import type { IBaseLocals } from '$lib/services/session/sessionManager';
 	import axios, { AxiosError } from 'axios';
+	import { Home } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
 	import { readable, readonly, writable } from 'svelte/store';
 
@@ -55,7 +56,7 @@
 			try {
 				await axios.post(action_url, formData);
 				toast.success('Order placed');
-        window.localStorage.setItem('cart', JSON.stringify([]));
+				window.localStorage.setItem('cart', JSON.stringify([]));
 				goto('/orders');
 			} catch (e) {
 				const error = e as AxiosError<{ error: { message: string } }>;
@@ -65,10 +66,15 @@
 	};
 </script>
 
-<form class="min-h-screen stack p-6 w-full" on:submit|preventDefault={handleSubmit}>
-	<p>Checkout</p>
-	<div class="h-stack w-full flex-wrap justify-center !items-start">
-		<div class="w-full max-w-[400px] sm:max-w-[540px] border rounded-lg p-10">
+<form class="min-h-screen max-w-[1024px] mx-auto stack p-6 w-full" on:submit|preventDefault={handleSubmit}>
+	<div class="h-stack w-full justify-between">
+		<p class="text-3xl font-bold self-start">Checkout Details</p>
+		<Button class="" variant="ghost" size="icon" on:click={() => goto('/')}>
+			<Home />
+		</Button>
+	</div>
+	<div class="grid grid-cols-1 md:grid-cols-2 justify-center !items-start w-full">
+		<div class="w-full border rounded-lg p-10">
 			<div class="stack">
 				<p class="text-xl font-bold mb-3">Billing Information</p>
 				<div class="stack w-full">
@@ -101,7 +107,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="stack w-full max-w-[400px] p-10 min-h-full">
+		<div class="stack w-full p-10 min-h-full">
 			<p class="text-xl font-bold mb-3">Order Summary</p>
 			{#each $displayCartItems as product}
 				<div class="w-full h-stack justify-between gap-2">

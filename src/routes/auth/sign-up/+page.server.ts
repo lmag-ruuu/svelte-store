@@ -1,7 +1,8 @@
 import type { InsertCustomer } from "$lib/db/customer.entity";
 import { createCustomer } from "$lib/services/customers";
+import type { IBaseLocals } from "$lib/services/session/sessionManager";
 import { createSupplier } from "$lib/services/suppliers";
-import { error, type Actions, type RequestEvent } from "@sveltejs/kit";
+import { error, redirect, type Actions, type RequestEvent } from "@sveltejs/kit";
 import { hash, genSalt } from 'bcrypt';
 
 const prepareUser = async ({ request }: RequestEvent<Partial<Record<string, string>>, string | null>): Promise<InsertCustomer> => {
@@ -45,5 +46,16 @@ export const actions: Actions = {
       const e = _e as Error;
       return error(400, { message: e.message });
     }
+  }
+}
+
+export const load = ({ locals }: { locals: IBaseLocals }) => {
+
+  if (locals.isUserLoggedIn) {
+    redirect(302, '/')
+  }
+
+  return {
+    session: locals
   }
 }
