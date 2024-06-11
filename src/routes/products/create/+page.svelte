@@ -39,6 +39,7 @@
 					disabled = false;
 				}, 2500);
 			} catch (_e) {
+				disabled = false;
 				const error = _e as AxiosError<{ error: { message: string } }>;
 				toast.error(error.response?.data?.error.message || 'Something went wrong');
 			}
@@ -110,7 +111,7 @@
 			</div>
 		</div>
 		<div class="stack w-full">
-			<Button type="submit" class="w-full" {disabled}>Create</Button>
+			<Button type="submit" class="w-full">Create</Button>
 		</div>
 	</form>
 </div>

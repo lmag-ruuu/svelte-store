@@ -16,7 +16,7 @@
 </script>
 
 <Card
-	class={cn('w-full rounded-xl overflow-hidden h-full', { '!h-stack': variant === 'horizontal' })}
+	class={cn('w-full rounded-xl overflow-hidden h-[365px]', { '!h-stack': variant === 'horizontal' })}
 >
 	<CardHeader class="p-0  max-h-[200px] overflow-hidden">
 		{#if product.image_url}
