@@ -35,9 +35,7 @@
 			{/if}
 		</div>
 	</div>
-	<!-- TODO create layout dashboard -->
-
-	<div class="grid gap-2 grid-cols-1 w-full">
+	<div class="grid gap-2 grid-cols-1 w-full max-w-[450px] mx-auto">
 		<picture class="justify-self-center">
 			 <div class="w-[80px] h-[80px] rounded-full bg-gray-200 object-fill stack justify-center !items-center text-gray-950">
 				<p>Avatar</p>
