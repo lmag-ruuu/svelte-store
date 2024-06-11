@@ -29,13 +29,22 @@ export const placeOrder = async (data: IOrderPayload) => {
       return acc;
     }, [] as unknown as Array<{ supplier_id: string, products: Array<{ id: string, quantity: number }> }>);
 
+    const totalsByProductGroup: Array<{ supplier_id: number, total: number }> = products?.reduce?.((acc, current) => {
+      const existing = acc.find((p) => p.supplier_id === current.supplier_id);
+      const quantity = data?.products?.find((p) => +p?.id === current?.id)?.quantity || 0;
+      if (existing) {
+        existing.total += +current.price * quantity;
+      } else {
+        acc.push({ supplier_id: current.supplier_id, total: +current.price * quantity });
+      }
+      return acc;
+    }, [] as unknown as Array<{ supplier_id: number, total: number }>);
+
     const newOrders: InsertOrder[] = products_by_supplier.map((p) => ({
       customer_id: +data.customer_id,
       supplier_id: +p.supplier_id,
       order_date: data.order_date,
-      total: products
-        .filter((i) => +i.id === +p.supplier_id)
-        .reduce((acc, current) => acc + +current.price * data?.products?.find((p) => +p?.id === current?.id)?.quantity!, 0).toString(),
+      total: totalsByProductGroup?.find((p) => p.supplier_id === +p.supplier_id)?.total?.toString() || "0",
       postal_code: data.postal_code,
       city: data.city,
       country: data.country,
@@ -43,6 +52,7 @@ export const placeOrder = async (data: IOrderPayload) => {
       status: 'pending',
       order_bundle_id: bundle_order_id
     }));
+
 
     const promises = newOrders.map(async (o) => {
       const order = await trx.insert(orders).values(o).returning();
@@ -52,12 +62,16 @@ export const placeOrder = async (data: IOrderPayload) => {
           .map((p) => ({
             order_id: order[0]?.id,
             product_id: +p.id,
-            quantity: p.quantity
+            quantity: p.quantity,
           }))
       );
     });
 
-    await Promise.all(promises);
+
+    await Promise.all(promises)
+      .then((data) => console.log("Order placed successfully", data))
+      .catch((e) => console.log(e));
+
   });
   return {
     status: 200,
