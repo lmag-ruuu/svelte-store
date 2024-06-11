@@ -41,7 +41,7 @@
 				<p>Avatar</p>
 			 </div>
 		</picture>
-		<div class="text-center w-full">
+		<div class="text-center w-full v-stack !gap-1">
 			<p>{data?.session?.user?.email}</p>
 			<p>{data?.session?.user?.user_type}</p>
 		</div>
