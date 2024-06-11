@@ -34,8 +34,14 @@
 </script>
 
 <MainDialog title="New Order">
-	<Button type="button" size="icon">
+	<Button type="button" size="icon" class="relative">
 		<ShoppingCart />
+		{#if $cartItems.length > 0}
+			<span
+				class="absolute h-[26px] w-[26px] bottom-[-14px] right-[-14px] text-sm text-white bg-red-700 p-1 rounded-full"
+				>{$cartItems.length}</span
+			>
+		{/if}
 	</Button>
 	<div slot="dialog-body" class="stack w-full">
 		{#if $displayCartItems.length === 0}
